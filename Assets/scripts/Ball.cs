@@ -7,6 +7,11 @@ public class Ball : MonoBehaviour
     public Transform PaddleLeft;
     private Vector2 Direction = Vector2.one;
 
+
+    private float paddleHeight = 2f;
+    private float paddleWidth = 0.3f;
+    private float ballSize = 0.3f;
+
     private void Start()
     {
         RandomDirection();
@@ -29,33 +34,7 @@ public class Ball : MonoBehaviour
     {
         Move();
         MaxScreenHeight();
-
-        float paddleHeight = 2f;
-        float paddleWidth = 0.3f;
-        float ballSize = 0.3f;
-
-        if (Direction.x > 0)
-        {
-            if ((transform.position.x + ballSize / 2f) > (PaddleRight.position.x - paddleWidth / 2f)
-            && (transform.position.x + ballSize / 2f) < (PaddleRight.position.x + paddleWidth / 2f)
-            && (transform.position.y) > (PaddleRight.position.y - paddleHeight / 2f)
-            && (transform.position.y) < (PaddleRight.position.y + paddleHeight / 2f)
-            )
-            {
-                Direction.x = -1;
-            }
-        }
-        else if (Direction.x < 0)
-        {
-            if ((transform.position.x - ballSize / 2) > (PaddleLeft.position.x - paddleWidth / 2f)
-            && (transform.position.x - ballSize / 2f) < (PaddleLeft.position.x + paddleWidth / 2f)
-            && (transform.position.y) > (PaddleLeft.position.y - paddleHeight / 2f)
-            && (transform.position.y) < (PaddleLeft.position.y + paddleHeight / 2f)
-            )
-            {
-                Direction.x = 1;
-            }
-        }
+        CollisionBallPaddle();
     }
 
 
@@ -80,6 +59,40 @@ public class Ball : MonoBehaviour
         {
             Direction.y = 1;
         }
+    }
+
+
+    private void CollisionBallPaddle()
+    {
+        if (Direction.x > 0)
+        {
+            if ((transform.position.x + ballSize / 2f) > (PaddleRight.position.x - paddleWidth / 2f)
+            && (transform.position.x + ballSize / 2f) < (PaddleRight.position.x + paddleWidth / 2f)
+            && (transform.position.y) > (PaddleRight.position.y - paddleHeight / 2f)
+            && (transform.position.y) < (PaddleRight.position.y + paddleHeight / 2f)
+            )
+            {
+                Direction.x = -1;
+            }
+        }
+        else if (Direction.x < 0)
+        {
+            if ((transform.position.x - ballSize / 2) > (PaddleLeft.position.x - paddleWidth / 2f)
+            && (transform.position.x - ballSize / 2f) < (PaddleLeft.position.x + paddleWidth / 2f)
+            && (transform.position.y) > (PaddleLeft.position.y - paddleHeight / 2f)
+            && (transform.position.y) < (PaddleLeft.position.y + paddleHeight / 2f)
+            )
+            {
+                Direction.x = 1;
+            }
+        }
+    }
+
+    public void ResetPosition()
+    {
+        transform.position = Vector3.zero;
+        Direction = -Direction;
+
     }
 
 }
