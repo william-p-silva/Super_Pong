@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManeger : MonoBehaviour
@@ -7,7 +8,7 @@ public class GameManeger : MonoBehaviour
     public int ScorePlayerRed = 0;
     public int PointsToIncreaseSpeed = 4;
     public float SpeedIncrement = 0.1f;
-
+    public int MaxScore = 2;
 
 
     public Ball Ball;
@@ -30,9 +31,13 @@ public class GameManeger : MonoBehaviour
             AddScore(player: 1);
             Ball.ResetPosition();
         }
-        if (ScorePlayerBlue == 12)
+        if (ScorePlayerBlue >= MaxScore || ScorePlayerRed >= MaxScore)
         {
-
+            VictoryGame();
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
         }
     }
 
@@ -54,16 +59,21 @@ public class GameManeger : MonoBehaviour
         Score.text = $"{ScorePlayerBlue} x {ScorePlayerRed}";
     }
 
-    private void VictoryGame(int player)
+    private void VictoryGame()
     {
-        if (player == 1)
+        if (ScorePlayerBlue > ScorePlayerRed)
         {
             Score.text = $"O jogoador azul ganhou o Jogo com {ScorePlayerBlue}";
         }
-        else if (player == 2)
+        else if (ScorePlayerBlue < ScorePlayerRed)
         {
             Score.text = $"O jogoador vermelho ganhou o Jogo com {ScorePlayerRed}";
         }
+        else if (ScorePlayerBlue == ScorePlayerRed)
+        {
+            Score.text = $"Os jogaroes empataram com ${ScorePlayerBlue} pontos";
+        }
+        Ball.IsMoving = false;
     }
 
 }

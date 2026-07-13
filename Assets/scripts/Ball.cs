@@ -5,8 +5,12 @@ public class Ball : MonoBehaviour
     public float Speed = 5;
     public Transform PaddleRight;
     public Transform PaddleLeft;
+    public Renderer RendererObj;
+    public Color ColorBlue = Color.blue;
+    public Color ColorRed = Color.red;
     private Vector2 Direction = Vector2.one;
-
+    public bool IsMoving = false;
+    
 
     private float paddleHeight = 2f;
     private float paddleWidth = 0.3f;
@@ -32,6 +36,10 @@ public class Ball : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space) && !IsMoving)
+        {
+            StartMoving();
+        }
         Move();
         MaxScreenHeight();
         CollisionBallPaddle();
@@ -40,8 +48,11 @@ public class Ball : MonoBehaviour
 
     private void Move()
     {
-        Vector3 movement = Direction * Speed * Time.deltaTime;
-        transform.Translate(movement);
+        if (IsMoving)
+        {
+            Vector3 movement = Direction * Speed * Time.deltaTime;
+            transform.Translate(movement);
+        }
     }
 
     private void MaxScreenHeight()
@@ -73,6 +84,7 @@ public class Ball : MonoBehaviour
             )
             {
                 Direction.x = -1;
+                RendererObj.material.color = ColorRed;
             }
         }
         else if (Direction.x < 0)
@@ -84,6 +96,7 @@ public class Ball : MonoBehaviour
             )
             {
                 Direction.x = 1;
+                RendererObj.material.color = ColorBlue;
             }
         }
     }
@@ -92,7 +105,13 @@ public class Ball : MonoBehaviour
     {
         transform.position = Vector3.zero;
         Direction = -Direction;
+        IsMoving = false;
+        Invoke("StartMoving", 2);
+    }
 
+    private void StartMoving()
+    {
+        IsMoving = true;
     }
 
 }
